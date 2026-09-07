@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { createObserveModule } from '@nestjs/observe';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-import { LeadsController } from './leads/leads.controller.js';
-import { LeadsService } from './leads/leads.service.js';
+
 import { ConfigModule } from '@nestjs/config';
+import { LeadsModule } from './leads/leads.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -19,9 +17,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     ConfigModule.forRoot({
       isGlobal : true,
-    })
-  ],
-  controllers: [AppController, LeadsController],
-  providers: [AppService, LeadsService],
+    }),
+    LeadsModule
+  ]  
 })
 export class AppModule {}
