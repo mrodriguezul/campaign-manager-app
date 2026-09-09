@@ -1,70 +1,47 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import type { Lead } from './lead.model.js';
 import { CreateLeadDto } from './dto/create-lead.dto.js';
 import { UpdateLeadDto } from './dto/update-lead.dto.js';
 import { ConfigService } from '@nestjs/config';
 import { Env } from '../env.model.js';
+import { Repository } from 'typeorm';
+import { Lead } from './entities/lead.entity.js';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class LeadsService {
-    constructor(private configService: ConfigService<Env>){}
-    private leads: Lead[] = [
-        {
-        id: '1',
-        name: 'John Doe',
-        phone: '1234567890',
-        context: 'promo internet',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        },
-        {
-        id: '2',
-        name: 'Jane Doe',
-        phone: '0987654321',
-        context: 'debt collection',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        },
-    ];
+    constructor(
+      @InjectRepository(Lead)
+      private leadsRepository: Repository<Lead>,
+      private configService: ConfigService<Env>){}
 
-  getLastLeadsIdIndex() {
-    const key = this.configService.get("KEY_APP");
-    if (this.leads.length === 0) {
-      return 1;
+  //const key = this.configService.get("KEY_APP");
+
+  async findAll() {
+    const leads = await this.leadsRepository.find();
+    return leads
+  }
+
+  async findById(id: number) {
+    const lead = await this.getLead(id);
+    return lead;
+  }
+
+  async create(lead: CreateLeadDto){    
+    try{
+      const newLead = await this.leadsRepository.save(lead);
+      return newLead;
+    }catch{
+      throw new BadRequestException("Error creating lead ...")
     }
-    return this.leads.length + 1;
   }
 
-  findAll(): Lead[] {
-    return this.leads;
-  }
-
-  findById(id: string): Lead {
-    const index = this.getLeadPosition(id);
-    return this.leads[index];
-  }
-
-  create(lead: CreateLeadDto): Lead {
-    const leadCreated: Lead = {
-      id: this.getLastLeadsIdIndex().toString(),
-      name: lead.name,
-      phone: lead.phone,
-      context: lead.context,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    console.log(leadCreated);
-    this.leads.push(leadCreated);
-    return leadCreated;
-  }
-
-  update(id: string, lead: UpdateLeadDto): Lead {
-    const index = this.getLeadPosition(id);
+  async update(id: number, lead: UpdateLeadDto) {
+    const leadFound = await this.getLead(id);
 
     if (
       (lead.name != undefined && lead.name.trim().length === 0) ||
@@ -76,25 +53,24 @@ export class LeadsService {
       );
     }
 
-    const updatedLead = { ...this.leads[index], ...lead };
-    updatedLead.updatedAt = new Date();
-    this.leads[index] = updatedLead;
-    return updatedLead;
+    const updatedLead = this.leadsRepository.merge(leadFound, lead);    
+    return this.leadsRepository.save(updatedLead);
   }
 
-  delete(id: string) {
-    const index = this.getLeadPosition(id);
-    this.leads = this.leads.filter((lead) => lead.id !== id);
+  async delete(id: number) {
+    const lead = await this.getLead(id);
+    await this.leadsRepository.delete(lead);
+    
     return {
       message: 'Lead deleted successfully',
     };
   }
 
-  private getLeadPosition(id: String) {
-    const position = this.leads.findIndex((lead) => lead.id === id);
-    if (position === -1) {
+  private async getLead(id: number) {
+    const lead = await this.leadsRepository.findOneBy({ id })
+    if (!lead) {
       throw new NotFoundException('Lead not found');
     }
-    return position;
+    return lead;
   }
 }

@@ -1,3 +1,8 @@
 export interface Env{
-    KEY_APP: string
+    KEY_APP: string;
+    POSTGRES_HOST: string;
+    POSTGRES_PORT: number;
+    POSTGRES_DB: string;
+    POSTGRES_USER: string;
+    POSTGRES_PASSWORD: string;
 }
