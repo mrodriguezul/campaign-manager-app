@@ -59,11 +59,24 @@ export class LeadsService {
 
   async delete(id: number) {
     const lead = await this.getLead(id);
-    await this.leadsRepository.delete(lead);
+    await this.leadsRepository.delete(lead.id);
     
     return {
       message: 'Lead deleted successfully',
     };
+  }
+
+  async getCallLogsByLeadId(id: number){
+    const lead = await this.leadsRepository.findOne({
+      where: {id},
+      relations: {
+        callLogs: true
+      }
+    });
+    if (!lead) {
+      throw new NotFoundException('Lead not found');
+    }    
+    return lead.callLogs;
   }
 
   private async getLead(id: number) {

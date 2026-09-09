@@ -26,6 +26,11 @@ export class LeadsController {
     return this.leadsService.findById(id);
   }
 
+  @Get(':id/call-logs')
+  getCallLogsByLeadId(@Param('id', ParseIntPipe) id: number) {
+    return this.leadsService.getCallLogsByLeadId(id);
+  }
+
   @Post()
   createLead(@Body() lead: CreateLeadDto) {
     return this.leadsService.create(lead);

@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, type Relation, UpdateDateColumn } from "typeorm";
+import { CallLog } from "./call-log.entity.js";
 
 @Entity({
     name: 'leads'
 })
 export class Lead{
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({name: 'lead_id'})
     id: number;
 
     @Column({ type: 'varchar', length: 70 })
@@ -21,4 +22,7 @@ export class Lead{
 
     @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: 'updated_at' })
     updatedAt: Date;
+
+    @OneToMany(() => CallLog, (callLog) => callLog.lead, {nullable: true, cascade: true})
+    callLogs: Relation<CallLog[]>;
 }
