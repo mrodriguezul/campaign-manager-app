@@ -33,7 +33,7 @@ export class LeadsController {
 
   @Get(':id/call-logs')
   getCallLogsByLeadId(@Param('id', ParseIntPipe) id: number) {
-    return this.leadsService.getCallLogsByLeadId(id);
+    return this.callLogService.getCallLogsByLeadId(id);
   }
 
   @Post(':id/call-logs')

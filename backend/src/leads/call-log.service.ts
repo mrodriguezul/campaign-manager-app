@@ -44,4 +44,19 @@ export class CallLogService {
       throw new BadRequestException('Error creating call log ...');
     }
   }
+
+  async getCallLogsByLeadId(id: number){
+    const lead = await this.leadsRepository.findOne({
+      where: {id},
+      relations: {
+        callLogs: {
+          agent: true
+        }
+      }
+    });
+    if (!lead) {
+      throw new NotFoundException('Lead not found');
+    }    
+    return lead.callLogs;
+  }
 }

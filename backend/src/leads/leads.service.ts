@@ -64,20 +64,7 @@ export class LeadsService {
     return {
       message: 'Lead deleted successfully',
     };
-  }
-
-  async getCallLogsByLeadId(id: number){
-    const lead = await this.leadsRepository.findOne({
-      where: {id},
-      relations: {
-        callLogs: true
-      }
-    });
-    if (!lead) {
-      throw new NotFoundException('Lead not found');
-    }    
-    return lead.callLogs;
-  }
+  }  
 
   private async getLead(id: number) {
     const lead = await this.leadsRepository.findOneBy({ id })
