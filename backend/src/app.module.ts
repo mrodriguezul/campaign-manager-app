@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LeadsModule } from './leads/leads.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from './env.model.js';
+import { AgentsModule } from './agents/agents.module.js';
 
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -34,7 +35,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       }),
       inject: [ConfigService], 
     }),
-    LeadsModule
+    LeadsModule,
+    AgentsModule
   ]  
 })
 export class AppModule {}
