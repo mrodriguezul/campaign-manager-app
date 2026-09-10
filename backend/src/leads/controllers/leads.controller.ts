@@ -8,11 +8,11 @@ import {
   Body,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CreateLeadDto } from './dto/create-lead.dto.js';
-import { UpdateLeadDto } from './dto/update-lead.dto.js';
-import { CreateCallLogDto } from './dto/create-call-log.dto.js';
-import { LeadsService } from './leads.service.js';
-import { CallLogService } from './call-log.service.js';
+import { CreateLeadDto } from '../dto/create-lead.dto.js';
+import { UpdateLeadDto } from '../dto/update-lead.dto.js';
+import { CreateCallLogDto } from '../dto/create-call-log.dto.js';
+import { LeadsService } from '../services/leads.service.js';
+import { CallLogService } from '../services/call-log.service.js';
 
 @Controller('leads')
 export class LeadsController {

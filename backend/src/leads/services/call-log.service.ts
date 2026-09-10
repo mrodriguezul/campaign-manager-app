@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CallLog } from './entities/call-log.entity.js';
-import { Lead } from './entities/lead.entity.js';
-import { CreateCallLogDto } from './dto/create-call-log.dto.js';
-import { AgentsService } from '../agents/agents.service.js';
+import { CallLog } from '../entities/call-log.entity.js';
+import { Lead } from '../entities/lead.entity.js';
+import { CreateCallLogDto } from '../dto/create-call-log.dto.js';
+import { AgentsService } from '../../agents/services/agents.service.js';
 
 @Injectable()
 export class CallLogService {

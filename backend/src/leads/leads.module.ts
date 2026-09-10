@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { LeadsController } from './leads.controller.js';
-import { LeadsService } from './leads.service.js';
-import { CallLogService } from './call-log.service.js';
+import { LeadsController } from './controllers/leads.controller.js';
+import { LeadsService } from './services/leads.service.js';
+import { CallLogService } from './services/call-log.service.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Lead } from './entities/lead.entity.js';
 import { CallLog } from './entities/call-log.entity.js';

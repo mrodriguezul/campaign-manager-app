@@ -4,12 +4,12 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateLeadDto } from './dto/create-lead.dto.js';
-import { UpdateLeadDto } from './dto/update-lead.dto.js';
+import { CreateLeadDto } from '../dto/create-lead.dto.js';
+import { UpdateLeadDto } from '../dto/update-lead.dto.js';
 import { ConfigService } from '@nestjs/config';
-import { Env } from '../env.model.js';
+import { Env } from '../../env.model.js';
 import { Repository } from 'typeorm';
-import { Lead } from './entities/lead.entity.js';
+import { Lead } from '../entities/lead.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()

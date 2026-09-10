@@ -8,9 +8,9 @@ import {
   Body,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CreateAgentDto } from './dto/create-agent.dto.js';
-import { UpdateAgentDto } from './dto/update-agent.dto.js';
-import { AgentsService } from './agents.service.js';
+import { CreateAgentDto } from '../dto/create-agent.dto.js';
+import { UpdateAgentDto } from '../dto/update-agent.dto.js';
+import { AgentsService } from '../services/agents.service.js';
 
 @Controller('agents')
 export class AgentsController {

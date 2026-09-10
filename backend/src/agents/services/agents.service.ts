@@ -4,10 +4,10 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateAgentDto } from './dto/create-agent.dto.js';
-import { UpdateAgentDto } from './dto/update-agent.dto.js';
+import { CreateAgentDto } from '../dto/create-agent.dto.js';
+import { UpdateAgentDto } from '../dto/update-agent.dto.js';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Agent } from './entities/agent.entity.js';
+import { Agent } from '../entities/agent.entity.js';
 import { Repository } from 'typeorm';
 
 @Injectable()
