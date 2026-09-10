@@ -1,5 +1,6 @@
-import { IsEmail, isEmail } from "class-validator";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { IsEmail } from "class-validator";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, type Relation, UpdateDateColumn } from "typeorm";
+import { CallLog } from "../../leads/entities/call-log.entity.js";
 
 @Entity({ name: 'agents' })
 export class Agent {
@@ -18,4 +19,7 @@ export class Agent {
 
     @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: 'updated_at' })
     updatedAt: Date;
+
+    @OneToMany(() => CallLog, (callLog) => callLog.agent)
+    callLogs: Relation<CallLog[]>
 }

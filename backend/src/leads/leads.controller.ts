@@ -10,11 +10,16 @@ import {
 } from '@nestjs/common';
 import { CreateLeadDto } from './dto/create-lead.dto.js';
 import { UpdateLeadDto } from './dto/update-lead.dto.js';
+import { CreateCallLogDto } from './dto/create-call-log.dto.js';
 import { LeadsService } from './leads.service.js';
+import { CallLogService } from './call-log.service.js';
 
 @Controller('leads')
 export class LeadsController {
-  constructor(private leadsService: LeadsService) {}
+  constructor(
+    private leadsService: LeadsService,
+    private callLogService: CallLogService,
+  ) {}
 
   @Get()
   getLeads() {
@@ -29,6 +34,14 @@ export class LeadsController {
   @Get(':id/call-logs')
   getCallLogsByLeadId(@Param('id', ParseIntPipe) id: number) {
     return this.leadsService.getCallLogsByLeadId(id);
+  }
+
+  @Post(':id/call-logs')
+  createCallLog(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createCallLogDto: CreateCallLogDto,
+  ) {
+    return this.callLogService.create(id, createCallLogDto);
   }
 
   @Post()
