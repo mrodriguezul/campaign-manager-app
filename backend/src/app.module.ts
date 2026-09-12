@@ -6,6 +6,7 @@ import { LeadsModule } from './leads/leads.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from './env.model.js';
 import { AgentsModule } from './agents/agents.module.js';
+import { AuthModule } from './auth/auth.module.js';
 
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -36,7 +37,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       inject: [ConfigService], 
     }),
     LeadsModule,
-    AgentsModule
+    AgentsModule,
+    AuthModule
   ]  
 })
 export class AppModule {}

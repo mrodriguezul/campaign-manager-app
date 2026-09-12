@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { IsEmail } from "class-validator";
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, type Relation, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, type Relation, Unique, UpdateDateColumn } from "typeorm";
 import { CallLog } from "../../leads/entities/call-log.entity.js";
 import { Exclude } from 'class-transformer';
 
@@ -12,7 +12,7 @@ export class Agent {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
-    @Column({ type: 'varchar', length: 30})
+    @Column({ type: 'varchar', length: 30, unique: true})
     @IsEmail()
     email: string;
 

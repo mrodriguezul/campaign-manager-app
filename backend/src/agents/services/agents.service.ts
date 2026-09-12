@@ -69,4 +69,11 @@ export class AgentsService {
     }
     return agent;
   }
+
+  async findOneByEmail(email: string){
+    const agent = await this.agentsRepository.findOne({
+      where: {email: email}
+    });
+    return agent;
+  }
 }
