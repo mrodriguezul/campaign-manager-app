@@ -1,6 +1,8 @@
+import * as bcrypt from 'bcrypt';
 import { IsEmail } from "class-validator";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, type Relation, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, type Relation, UpdateDateColumn } from "typeorm";
 import { CallLog } from "../../leads/entities/call-log.entity.js";
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'agents' })
 export class Agent {
@@ -14,6 +16,10 @@ export class Agent {
     @IsEmail()
     email: string;
 
+    @Exclude()
+    @Column({ type: 'varchar', length: 255 })
+    password: string;
+
     @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
     createdAt: Date;
 
@@ -22,4 +28,9 @@ export class Agent {
 
     @OneToMany(() => CallLog, (callLog) => callLog.agent)
     callLogs: Relation<CallLog[]>
+
+    @BeforeInsert()
+    async hashPassword(){
+        this.password = await bcrypt.hash(this.password, 10);
+    }
 }

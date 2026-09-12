@@ -29,8 +29,9 @@ export class AgentsService {
 
   async create(agent: CreateAgentDto) {
     try {
-      const newAgent = await this.agentsRepository.save(agent);
-      return newAgent;
+      const newAgent = await this.agentsRepository.create(agent);
+      const savedAgent = await this.agentsRepository.save(newAgent);
+      return savedAgent;
     } catch {
       throw new BadRequestException('Error creating agent ...');
     }
