@@ -1,10 +1,14 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AgentsService } from '../../agents/services/agents.service.js';
+import { JwtService } from '@nestjs/jwt';
+import { Agent } from '../../agents/entities/agent.entity.js';
 
 @Injectable()
 export class AuthService {
-    constructor(private agentService: AgentsService){}
+    constructor(
+        private agentService: AgentsService,
+        private jwtService: JwtService){}
 
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.agentService.findOneByEmail(email);
@@ -16,5 +20,10 @@ export class AuthService {
             return user;
         }
         return null;
+    }
+
+    generateToken(user: Agent){
+        const payload = { sub: user.id };
+        return this.jwtService.sign(payload);
     }
 }
