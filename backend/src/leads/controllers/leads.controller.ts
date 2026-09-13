@@ -7,12 +7,14 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateLeadDto } from '../dto/create-lead.dto.js';
 import { UpdateLeadDto } from '../dto/update-lead.dto.js';
 import { CreateCallLogDto } from '../dto/create-call-log.dto.js';
 import { LeadsService } from '../services/leads.service.js';
 import { CallLogService } from '../services/call-log.service.js';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('leads')
 export class LeadsController {
@@ -36,6 +38,7 @@ export class LeadsController {
     return this.callLogService.getCallLogsByLeadId(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post(':id/call-logs')
   createCallLog(
     @Param('id', ParseIntPipe) id: number,
@@ -44,16 +47,19 @@ export class LeadsController {
     return this.callLogService.create(id, createCallLogDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   createLead(@Body() lead: CreateLeadDto) {
     return this.leadsService.create(lead);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   updateLead(@Param('id', ParseIntPipe) id: number, @Body() lead: UpdateLeadDto) {
     return this.leadsService.update(id, lead);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   deleteLead(@Param('id', ParseIntPipe) id: number) {
     return this.leadsService.delete(id);

@@ -7,6 +7,7 @@ import { AuthController } from './controllers/auth.controller.js';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Env } from '../env.model.js';
+import { JwtStrategy } from './strategy/jwt.strategy.js';
 
 @Module({
   imports: [AgentsModule, PassportModule, JwtModule.registerAsync({
@@ -16,7 +17,7 @@ import { Env } from '../env.model.js';
       signOptions: { expiresIn: '10m' }
     }),    
   })],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController]
 })
 export class AuthModule {}

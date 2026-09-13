@@ -7,11 +7,14 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateAgentDto } from '../dto/create-agent.dto.js';
 import { UpdateAgentDto } from '../dto/update-agent.dto.js';
 import { AgentsService } from '../services/agents.service.js';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('agents')
 export class AgentsController {
   constructor(private agentsService: AgentsService) {}
