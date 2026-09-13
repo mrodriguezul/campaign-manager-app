@@ -8,7 +8,4 @@ export class CreateCallLogDto {
   @IsString()
   @IsOptional()
   notes?: string;
-
-  @IsInt()
-  agentId: number;
 }

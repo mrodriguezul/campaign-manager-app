@@ -20,14 +20,13 @@ export class CallLogService {
     private agentsService: AgentsService,
   ) {}
 
-  async create(leadId: number, createCallLogDto: CreateCallLogDto) {
+  async create(leadId: number, createCallLogDto: CreateCallLogDto, idAgent: number) {
     const lead = await this.leadsRepository.findOneBy({ id: leadId });
     if (!lead) {
       throw new NotFoundException('Lead not found');
     }
-
-    const agent = await this.agentsService.findById(createCallLogDto.agentId);
-
+    
+    const agent = await this.agentsService.findById(idAgent);
     if (!agent) {
       throw new NotFoundException('Agent not found');
     }

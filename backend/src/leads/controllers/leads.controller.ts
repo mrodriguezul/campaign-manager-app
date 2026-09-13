@@ -8,13 +8,17 @@ import {
   Body,
   ParseIntPipe,
   UseGuards,
+  Request
 } from '@nestjs/common';
+import type { Request as ExpressRequest } from 'express';
+
 import { CreateLeadDto } from '../dto/create-lead.dto.js';
 import { UpdateLeadDto } from '../dto/update-lead.dto.js';
 import { CreateCallLogDto } from '../dto/create-call-log.dto.js';
 import { LeadsService } from '../services/leads.service.js';
 import { CallLogService } from '../services/call-log.service.js';
 import { AuthGuard } from '@nestjs/passport';
+import { Payload } from '../../auth/model/payload.model.js';
 
 @Controller('leads')
 export class LeadsController {
@@ -43,8 +47,10 @@ export class LeadsController {
   createCallLog(
     @Param('id', ParseIntPipe) id: number,
     @Body() createCallLogDto: CreateCallLogDto,
+    @Request() req: ExpressRequest
   ) {
-    return this.callLogService.create(id, createCallLogDto);
+    const user = req.user as any;
+    return this.callLogService.create(id, createCallLogDto, user.userId);
   }
 
   @UseGuards(AuthGuard('jwt'))

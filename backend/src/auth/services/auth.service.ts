@@ -3,6 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AgentsService } from '../../agents/services/agents.service.js';
 import { JwtService } from '@nestjs/jwt';
 import { Agent } from '../../agents/entities/agent.entity.js';
+import { Payload } from '../model/payload.model.js';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     }
 
     generateToken(user: Agent){
-        const payload = { sub: user.id };
+        const payload : Payload = { sub: user.id };
         return this.jwtService.sign(payload);
     }
 }
