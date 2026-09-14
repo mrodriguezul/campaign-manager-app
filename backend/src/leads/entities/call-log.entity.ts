@@ -9,11 +9,14 @@ export class CallLog{
     @PrimaryGeneratedColumn({name: 'call_logs_id'})
     id: number;
 
-    @Column({type: 'varchar', length: 20, nullable: false})
+    @Column({type: 'varchar', length: 100, nullable: false})
+    notes: string;
+
+    @Column({type: 'varchar', length: 30, nullable: false})
     status: string;
 
-    @Column({type: 'varchar', length: 50, nullable: true})
-    notes: string;
+    @Column({type: 'varchar', length: 180, nullable: true})
+    summary: string;
 
     @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
     createdAt: Date;
