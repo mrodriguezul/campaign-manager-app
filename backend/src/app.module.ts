@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from './env.model.js';
 import { AgentsModule } from './agents/agents.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { AiModule } from './ai/ai.module.js';
 
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -38,7 +39,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     LeadsModule,
     AgentsModule,
-    AuthModule
+    AuthModule,
+    AiModule
   ]  
 })
 export class AppModule {}

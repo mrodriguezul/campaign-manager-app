@@ -9,6 +9,9 @@ import { CallLog } from '../entities/call-log.entity.js';
 import { Lead } from '../entities/lead.entity.js';
 import { CreateCallLogDto } from '../dto/create-call-log.dto.js';
 import { AgentsService } from '../../agents/services/agents.service.js';
+import { PromptService } from '../../ai/services/prompt.service.js';
+import { GeminiService } from '../../ai/services/gemini.service.js';
+import { CallLogResponse } from '../../ai/model/call-log-response.model.js';
 
 @Injectable()
 export class CallLogService {
@@ -18,6 +21,8 @@ export class CallLogService {
     @InjectRepository(Lead)
     private leadsRepository: Repository<Lead>,
     private agentsService: AgentsService,
+    private promptsService: PromptService,
+    private geminiService: GeminiService
   ) {}
 
   async create(leadId: number, createCallLogDto: CreateCallLogDto, idAgent: number) {
@@ -31,10 +36,17 @@ export class CallLogService {
       throw new NotFoundException('Agent not found');
     }
 
+    const rawNotes = createCallLogDto.notes as string;
+    const prompt = this.promptsService.getPrompt('call-log', { rawNotes });
+
+    const aiResponse = await this.geminiService.generateResponse(prompt) as CallLogResponse;
+
     try {
       const newCallLog = this.callLogsRepository.create({
-        status: createCallLogDto.status,
+        
         notes: createCallLogDto.notes,
+        status: aiResponse.status,
+        summary: aiResponse.summary,
         lead,
         agent,
       });

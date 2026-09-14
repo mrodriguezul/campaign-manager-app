@@ -1,5 +1,5 @@
 export interface Env{
-    KEY_APP: string;
+    GEMINI_API_KEY: string;
     POSTGRES_HOST: string;
     POSTGRES_PORT: number;
     POSTGRES_DB: string;
