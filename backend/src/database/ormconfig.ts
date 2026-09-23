@@ -1,7 +1,9 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 
-config();
+config(
+  { path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' }
+);
 
 export default new DataSource({
   type: 'postgres',
@@ -12,5 +14,5 @@ export default new DataSource({
   database: process.env.POSTGRES_DB,
   entities: ['./src/**/*.entity.ts'],
   migrations: ['./src/database/migrations/*.ts'],
-  synchronize: false,
+  synchronize: process.env.NODE_ENV === 'test'
 });

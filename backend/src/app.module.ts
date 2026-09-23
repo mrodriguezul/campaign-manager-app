@@ -20,9 +20,10 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       appKey: 'YOUR_APP_KEY',
       appSecret: 'YOUR_APP_SECRET',
       serviceId: 'backend',
-    }),    
+    }),
     ConfigModule.forRoot({
       isGlobal : true,
+      envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
     }),
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService<Env>) => ({
@@ -33,7 +34,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         password: configService.get("POSTGRES_PASSWORD", {infer: true}),
         database: configService.get("POSTGRES_DB", {infer: true}),
         autoLoadEntities: true,
-        synchronize: false,
+        synchronize: configService.get("NODE_ENV", { infer: true }) === 'test',
       }),
       inject: [ConfigService], 
     }),

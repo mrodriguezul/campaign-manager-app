@@ -1,4 +1,5 @@
 export interface Env{
+    NODE_ENV: 'development' | 'production' | 'test';
     GEMINI_API_KEY: string;
     POSTGRES_HOST: string;
     POSTGRES_PORT: number;
