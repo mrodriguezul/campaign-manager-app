@@ -113,6 +113,36 @@ describe('LeadsService', () => {
     expect(leadsRepository.save).toHaveBeenCalledWith(updatedLead);
   });
 
+  describe('update validation branches', () => {
+    it('should throw UnprocessableEntityException for an empty phone', async () => {
+      leadsRepository.findOneBy.mockResolvedValue({
+        id: 1,
+        name: 'Lead 1',
+      });
+
+      await expect(
+        service.update(1, { phone: '   ' }),
+      ).rejects.toBeInstanceOf(UnprocessableEntityException);
+
+      expect(leadsRepository.merge).not.toHaveBeenCalled();
+      expect(leadsRepository.save).not.toHaveBeenCalled();
+    });
+
+    it('should throw UnprocessableEntityException for an empty context', async () => {
+      leadsRepository.findOneBy.mockResolvedValue({
+        id: 1,
+        name: 'Lead 1',
+      });
+
+      await expect(
+        service.update(1, { context: '   ' }),
+      ).rejects.toBeInstanceOf(UnprocessableEntityException);
+
+      expect(leadsRepository.merge).not.toHaveBeenCalled();
+      expect(leadsRepository.save).not.toHaveBeenCalled();
+    });
+  });
+
   it('should throw NotFoundException when updating a missing lead', async () => {
     leadsRepository.findOneBy.mockResolvedValue(null);
 
