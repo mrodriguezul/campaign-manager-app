@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Param,
-  Body,
-  ParseIntPipe,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CreateAgentDto } from '../dto/create-agent.dto.js';
 import { UpdateAgentDto } from '../dto/update-agent.dto.js';
 import { AgentsService } from '../services/agents.service.js';
