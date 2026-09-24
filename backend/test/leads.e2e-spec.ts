@@ -1,4 +1,12 @@
-import { beforeAll, beforeEach, afterAll, describe, expect, it } from '@jest/globals';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import { ValidationPipe } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import request from 'supertest';
@@ -26,7 +34,14 @@ describe('LeadsController (e2e)', () => {
 
   beforeAll(async () => {
     helper = new E2eTestHelper();
-    await helper.initializeApp();
+    await helper.initializeApp({
+      generateResponse: jest
+        .fn<(...args: any[]) => Promise<any>>()
+        .mockResolvedValue({
+        summary: 'Mock summary',
+        status: 'INTERESTED',
+        }),
+    });
     app = helper.app;
     dataSource = helper.dataSource;
 
@@ -148,6 +163,53 @@ describe('LeadsController (e2e)', () => {
 
     it('should return 404 for an unknown lead id', async () => {
       await request(app.getHttpServer()).get('/leads/999999').expect(404);
+    });
+  });
+
+  describe('Call Logs Flow', () => {
+    it('should create a call log and return it through the lead relationship endpoint', async () => {
+      const createLeadResponse = await request(app.getHttpServer())
+        .post('/leads')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(validLead)
+        .expect(201);
+
+      const leadId = createLeadResponse.body.id;
+      expect(leadId).toEqual(expect.any(Number));
+
+      const callLogPayload = {
+        status: 'completed',
+        notes: 'The client requests a commercial proposal.',
+      };
+
+      const createCallLogResponse = await request(app.getHttpServer())
+        .post(`/leads/${leadId}/call-logs`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(callLogPayload)
+        .expect(201);
+
+      expect(createCallLogResponse.body).toEqual(
+        expect.objectContaining({
+          id: expect.any(Number),
+          notes: callLogPayload.notes,
+          status: 'INTERESTED',
+          summary: 'Mock summary',
+          createdAt: expect.any(String),
+        }),
+      );
+
+      const callLogsResponse = await request(app.getHttpServer())
+        .get(`/leads/${leadId}/call-logs`)
+        .expect(200);
+
+      expect(callLogsResponse.body).toEqual([
+        expect.objectContaining({
+          id: createCallLogResponse.body.id,
+          notes: callLogPayload.notes,
+          status: 'INTERESTED',
+          summary: 'Mock summary',
+        }),
+      ]);
     });
   });
 });

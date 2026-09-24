@@ -2,15 +2,24 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module.js';
+import { GeminiService } from '../src/ai/services/gemini.service.js';
+
+type GeminiServiceOverride = Pick<GeminiService, 'generateResponse'>;
 
 export class E2eTestHelper {
   public app: INestApplication;
   public dataSource: DataSource;
 
-  async initializeApp(): Promise<void> {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+  async initializeApp(geminiService?: GeminiServiceOverride): Promise<void> {
+    const moduleBuilder = Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    });
+
+    if (geminiService) {
+      moduleBuilder.overrideProvider(GeminiService).useValue(geminiService);
+    }
+
+    const moduleFixture: TestingModule = await moduleBuilder.compile();
 
     this.app = moduleFixture.createNestApplication();
     await this.app.init();
