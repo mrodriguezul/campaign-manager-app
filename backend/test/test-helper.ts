@@ -5,12 +5,16 @@ import { AppModule } from '../src/app.module.js';
 import { GeminiService } from '../src/ai/services/gemini.service.js';
 
 type GeminiServiceOverride = Pick<GeminiService, 'generateResponse'>;
+type AppConfigurator = (app: INestApplication) => void;
 
 export class E2eTestHelper {
   public app: INestApplication;
   public dataSource: DataSource;
 
-  async initializeApp(geminiService?: GeminiServiceOverride): Promise<void> {
+  async initializeApp(
+    geminiService?: GeminiServiceOverride,
+    configureApp?: AppConfigurator,
+  ): Promise<void> {
     const moduleBuilder = Test.createTestingModule({
       imports: [AppModule],
     });
@@ -22,6 +26,7 @@ export class E2eTestHelper {
     const moduleFixture: TestingModule = await moduleBuilder.compile();
 
     this.app = moduleFixture.createNestApplication();
+    configureApp?.(this.app);
     await this.app.init();
     this.dataSource = this.app.get(DataSource);
   }
