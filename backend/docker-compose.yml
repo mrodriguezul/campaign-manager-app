@@ -1,5 +1,5 @@
 services:
-  postgres:
+  db:
     image: postgres:16-alpine
     container_name: campaign-manager-postgres
     restart: unless-stopped
@@ -13,35 +13,41 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d
     networks:
-      - campaing-network
+      - campaign-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d campaign_manager"]
       interval: 5s
       timeout: 5s
       retries: 10
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: campaign-manager-pgadmin
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: campaign-manager-backend
     restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@campaign.com
-      PGADMIN_DEFAULT_PASSWORD: admin_password
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
-      - '5050:80'
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    networks:
-      - campaing-network
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: campaign_manager
+      JWT_SECRET: ${JWT_SECRET}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    command: >
+      sh -c "pnpm run start:prod"
     depends_on:
-      - postgres
-      
+      db:
+        condition: service_healthy
+    networks:
+      - campaign-network
+
 volumes:
   postgres_data:
     driver: local
-  pgadmin_data:
-    driver: local
 
 networks:
-  campaing-network:
+  campaign-network:
     driver: bridge
