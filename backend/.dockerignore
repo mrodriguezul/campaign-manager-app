@@ -2,6 +2,5 @@ node_modules
 dist
 .git
 coverage
-test
 *.md
 .env*

@@ -1,0 +1,41 @@
+services:
+  db-test:
+    image: postgres:16-alpine
+    container_name: campaign-manager-db-test
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: campaign_manager_test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d campaign_manager_test"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    networks:
+      - test-network
+
+  e2e-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: campaign-manager-e2e
+    environment:
+      NODE_ENV: test
+      POSTGRES_HOST: db-test
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: campaign_manager_test
+      JWT_SECRET: super-secret-test
+      GEMINI_API_KEY: mock-api-key 
+    command: >
+      sh -c "pnpm run test:e2e"
+    depends_on:
+      db-test:
+        condition: service_healthy
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
