@@ -1,18 +1,21 @@
 version: 2.1
-orbs:
-  node: circleci/node@5.0.2
 jobs:
-  build_and_test: # this can be any name you choose
-    executor: node/default # use the default executor defined within the orb
+  build_and_test:
+    docker:
+      - image: cimg/node:20.19
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: pnpm
       - run:
-          command: cd backend/ && pnpm run test
+          command: corepack enable && corepack prepare pnpm@9.15.9 --activate
+          name: Install pnpm
+      - run:
+          command: pnpm install --dir backend --frozen-lockfile
+          name: Install backend dependencies
+      - run:
+          command: pnpm --dir backend run test
           name: Run tests
       - run:
-          command: cd backend/ && pnpm run build
+          command: pnpm --dir backend run build
           name: Build app
       - persist_to_workspace:
           root: ~/project
