@@ -20,6 +20,9 @@ jobs:
           command: pnpm --dir backend run test
           name: Run tests
       - run:
+          command: pnpm --dir backend run test:cov
+          name: Upload unit test coverage to Coveralls
+      - run:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
           name: Wait for PostgreSQL
       - run:
