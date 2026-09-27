@@ -11,6 +11,8 @@ Developed by **Miguel Rodríguez** as a technical take-home challenge for **PUSE
 ## Badges
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/mrodriguezul/campaign-manager-app/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mrodriguezul/campaign-manager-app/tree/main)
 
+[![Coverage Status](https://coveralls.io/repos/github/mrodriguezul/campaign-manager-app/badge.svg?branch=main)](https://coveralls.io/github/mrodriguezul/campaign-manager-app?branch=main)
+
 ## Project Objective
 
 Build a scalable, enterprise-ready REST API for managing call center campaigns, agents, leads, and immutable call logs, with a clean architecture and strict separation of concerns.
