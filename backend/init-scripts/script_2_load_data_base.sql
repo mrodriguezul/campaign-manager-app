@@ -4,7 +4,7 @@
 
 INSERT INTO public.agents
 ("name", email, "password", created_at, updated_at)
-VALUES('Angel', 'angel@gmail.com', '$2b$10$0fkMy65Xcd2j1AYLKc72memJMdPH5.k8aUyrmZDo/.SwGkHrHIwvK', '2026-09-11 19:05:40.955', '2026-09-11 19:05:40.955');
+VALUES('Example', 'example@gmail.com', '$2b$10$0fkMy65Xcd2j1AYLKc72memJMdPH5.k8aUyrmZDo/.SwGkHrHIwvK', '2026-09-11 19:05:40.955', '2026-09-11 19:05:40.955');
 
 
 INSERT INTO public.leads

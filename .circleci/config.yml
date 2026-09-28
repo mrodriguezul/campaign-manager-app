@@ -43,7 +43,21 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths: .
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Trigger Render Deployment
+          command: |
+            curl -X POST "$RENDER_DEPLOY_HOOK"
 workflows:
   build_test_deploy: # this can be any name you choose
     jobs:
       - build_and_test
+      - deploy:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: main

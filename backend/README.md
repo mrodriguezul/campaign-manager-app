@@ -6,7 +6,7 @@
 ![Jest](https://img.shields.io/badge/Jest-C21325?logo=jest&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 
-Developed by **Miguel Rodríguez** as a technical take-home challenge for **PUSE Agencia**.
+Developed by **Miguel Rodríguez** as a technical take-home challenge.
 
 ## Badges
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/mrodriguezul/campaign-manager-app/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mrodriguezul/campaign-manager-app/tree/main)
@@ -88,8 +88,12 @@ The script uses `docker-compose.yml` and automatically manages:
 ## API Documentation
 
 Once the application is running, access the interactive Swagger documentation at:
-
+Local:
 [http://localhost:3000/docs](http://localhost:3000/docs)
+
+Internet:
+[https://campaign-manager-app-kz51.onrender.com/docs](https://campaign-manager-app-kz51.onrender.com/docs)
+
 
 ## How to Run the Tests
 
