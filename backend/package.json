@@ -25,7 +25,7 @@
     "migrations:generate": "pnpm run typeorm migration:generate",
     "migrations:show": "pnpm run typeorm migration:show",
     "migrations:run": "npm run typeorm migration:run",
-    "migrations:create": "npm run typeorm migration:create"
+    "migrations:create": "typeorm migration:create"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
